@@ -1,1 +1,2 @@
-console.log "hello lwowelk"
+module.exports = 
+  init:-> console.log "hello lwowelk"

@@ -1,5 +1,6 @@
-var coffee = require('coffee-script');
-coffee.compile('server.coffee');
+var coffee = require('coffee-script').register();
+var server = require('./server.coffee');
+server.init();
 // var express = require('express');
 // var path = require('path');
 // var favicon = require('serve-favicon');

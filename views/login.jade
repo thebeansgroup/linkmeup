@@ -1,0 +1,16 @@
+form(action = "/login", method = "post")
+  .form-group
+    label Email
+    input.form-control(name = "email", type = "text")
+  .form-group
+    label Password
+    input.form-control(name = "password", type = "password")
+  button.btn.btn-warning.btn-lg(type = "submit") Login
+  
+  p
+   Need an account?
+    a(href = "/signup") Signup
+  p
+    Or go
+    succeed "." do
+      a(href = "/") home

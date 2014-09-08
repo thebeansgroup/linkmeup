@@ -16,7 +16,9 @@ unless global.hasOwnProperty("db")
     # the application is executed on the local machine ... use mysql
     sequelize = new Sequelize 'tbg_links', 'ad', '',
       dialect: 'postgres'
+      protocol: "postgres"
       port:    5432
+      logging: true
 
 
 

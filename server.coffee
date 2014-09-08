@@ -8,9 +8,10 @@ logger = require("morgan")
 cookieParser = require("cookie-parser")
 bodyParser = require("body-parser")
 pg = require("pg")
-routes = require("./routes/index")
 passport = require("passport")
 db      = require('./models')
+flash = require('express-flash')
+session = require('express-session')
 
 #
 # Set up
@@ -24,15 +25,42 @@ app.use logger("dev")
 app.use bodyParser.json()
 app.use bodyParser.urlencoded(extended: false)
 app.use cookieParser()
+app.use session({secret: 'secretKey'})
 app.use express.static(path.join(__dirname, "public"))
-app.use "/", routes
 
 app.use passport.initialize()
 app.use passport.session()
-
+app.use flash()
+passport.use require('./auth/local')(db.User)
 
 #
 # Define routes
+#
+
+app.get "/login", (req, res) ->
+  res.render "login",
+    title: "Express"
+    message: req.flash('error')
+
+app.post "/login", passport.authenticate("local",
+  successRedirect: "/"
+  failureRedirect: "/login"
+  failureFlash: true
+)
+
+app.get "/signup", (req, res) ->
+  res.render "signup",
+    title: "Express"
+
+app.post "/signup", (req, res) ->
+  db.User.build(req.body)
+    .save().complete (err,user) ->
+      # console.log(err) if err
+      console.log user
+      res.send 'done'
+
+#
+# Catch all routes
 #
 
 app.use (req, res, next) ->
@@ -58,13 +86,15 @@ app.use (err, req, res, next) ->
 
   return
 
+
+
 #
 # Lets go
 #
 
 app.set "port", process.env.PORT or 3000
 
-db.sequelize.sync().complete (err) ->
+db.sequelize.sync({force: true}).complete (err) ->
   if err
     throw err[0]
   else

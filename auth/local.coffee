@@ -1,17 +1,13 @@
 LocalStrategy = require("passport-local").Strategy
 
-auth = (username, password, done) ->
-  User.findOne username: username, (err, user) ->
-    return done(err)  if err
-    unless user
-      return done(null, false,
-        message: "Incorrect username."
-      )
-    unless user.validPassword(password)
-      return done(null, false,
-        message: "Incorrect password."
-      )
-    done null, user
-
 module.exports = (User) ->
- return new LocalStrategy auth
+  new LocalStrategy {usernameField: 'email'}, (email, password, done) ->
+    console.log email
+    User.find( where: {email: email}).error(
+      (err) -> return done(err) 
+    ).success (user) ->
+      return done(null, false, message: "Incorrect email.") unless user
+      user.comparePassword password, (err, match) ->
+        return done(null, false, message: "Incorrect password.") unless match
+        done null, user
+

@@ -1,6 +1,12 @@
 extends layout
-
-h1= title
-p Welcome to #{title}
-a(href = "/signup") signup
-a(href = "/login") login
+block content
+  h1= title
+  p Welcome to #{title}
+  ul
+    each user in users
+      li= user.email
+  if login == false
+    a(href = "/signup") signup
+    a(href = "/login") login
+  else
+    a(href = "/logout") log out

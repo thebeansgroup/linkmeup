@@ -1,5 +1,6 @@
 module.exports = 
   init:-> console.log "hello lwowelk"
+
 express = require("express")
 path = require("path")
 favicon = require("serve-favicon")
@@ -7,12 +8,15 @@ logger = require("morgan")
 cookieParser = require("cookie-parser")
 bodyParser = require("body-parser")
 pg = require("pg")
-flash = require("connect-flash")
-session = require("express-session")
 routes = require("./routes/index")
 passport = require("passport")
+db      = require('./models')
 
-app = express();
+#
+# Set up
+#
+
+app = express()
 
 app.set "views", path.join(__dirname, "views")
 app.set "view engine", "jade"
@@ -25,7 +29,11 @@ app.use "/", routes
 
 app.use passport.initialize()
 app.use passport.session()
-app.use flash()
+
+
+#
+# Define routes
+#
 
 app.use (req, res, next) ->
   err = new Error("Not Found")
@@ -50,8 +58,19 @@ app.use (err, req, res, next) ->
 
   return
 
+#
+# Lets go
+#
+
 app.set "port", process.env.PORT or 3000
-server = app.listen(app.get("port"), ->
-  console.log "Express server listening on port " + server.address().port
-  return
-)
+
+db.sequelize.sync().complete (err) ->
+  if err
+    throw err[0]
+  else
+    server = app.listen(app.get("port"), ->
+      db.User.findAll().success (users) ->
+        console.log arguments
+      console.log "Express server listening on port " + server.address().port
+      return
+    )

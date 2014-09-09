@@ -1,0 +1,12 @@
+extends layout
+block content
+  h1= title
+  p Welcome to #{title}
+  
+  form(action="/link", method="post")
+    .form-group
+      label Link
+        input.form-control(name = "url", type = "text")
+      .form-group
+        
+      button.btn.btn-warning.btn-lg(type = "submit") Post URL

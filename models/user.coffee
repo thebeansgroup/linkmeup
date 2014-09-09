@@ -3,6 +3,7 @@ bcrypt = require('bcrypt')
 module.exports = (sequelize, DataTypes) ->
   User = sequelize.define "User", {
       email: { type: DataTypes.STRING, unique: true }
+      links: { type: DataTypes.STRING }
       password: 
         type: DataTypes.STRING
         set: (v) ->
@@ -17,3 +18,4 @@ module.exports = (sequelize, DataTypes) ->
           return cb(err)  if err
           cb null, isMatch
   }
+

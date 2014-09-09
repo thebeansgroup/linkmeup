@@ -26,6 +26,7 @@ unless global.hasOwnProperty("db")
     Sequelize: Sequelize
     sequelize: sequelize
     User: sequelize.import(__dirname + "/user")
+    Link: sequelize.import(__dirname + "/link")
 
 # add your other models here
 

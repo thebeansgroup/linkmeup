@@ -82,9 +82,28 @@ app.post "/signup", (req, res) ->
     .save().complete( (user) ->
       passport.authenticate('local')(req, res, () -> res.redirect('/'))
     ).error (err) ->
+      console.log err
+      #res.send 'err'
+#
+# Post routes.
+#
+app.get "/links", (req, res) ->
+  db.Link.findAll().success (links) ->
+    res.render "links",
+      title: "LinkyDinks",
+      links: links
+
+app.get "/link", (req, res) ->
+  res.render "link"
+
+app.post "/link", (req, res) ->
+  db.Link.build(req.body)
+    .save().complete( (link) ->
+      res.redirect "links"
+    ).error (err) ->
       res.send 'err'
 
-#
+# 
 # Catch all routes
 #
 
@@ -106,8 +125,6 @@ app.use (err, req, res, next) ->
   res.render "error",
     message: err.message
     error: {}
-
-
 
 
 #

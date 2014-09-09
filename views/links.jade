@@ -3,12 +3,12 @@ block content
   h1= title
   p Welcome to #{title}
   ul
-    each user in users
-      li= user.email
+    each link in links
+      li= link.url
   if login == false
     a(href = "/signup") signup
     a(href = "/login") login
-    a(href = "/links") links
+    a(href = "/link") New link
   else
     a(href = "/logout") log out
-    a(href = "/links") links
+    a(href = "/link") New link

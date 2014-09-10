@@ -97,11 +97,23 @@ app.get "/link", (req, res) ->
   res.render "link"
 
 app.post "/link", (req, res) ->
-  db.Link.build(req.body)
-    .save().complete( (link) ->
-      res.redirect "links"
-    ).error (err) ->
-      res.send 'err'
+  db.User.find(1).success (user)->
+    db.Link.build(req.body)
+      .save().success( (link)->
+        user.addLink(link).success (task)->
+          res.redirect "links"
+      ).error (err) ->
+        res.send 'err'
+
+
+app.get "/profile/:id", (req, res) ->
+  db.User.find(req.params.id).success (user)->
+    user.getLinks().success (links)->
+      res.render "profile",
+        title: "title",
+        user: user
+        links: links
+
 
 # 
 # Catch all routes

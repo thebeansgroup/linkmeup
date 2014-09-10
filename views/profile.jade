@@ -1,0 +1,6 @@
+extends layout
+block content
+  p= user.email
+  ul
+   for link in links
+    li= link.url

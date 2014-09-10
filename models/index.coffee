@@ -28,6 +28,7 @@ unless global.hasOwnProperty("db")
     User: sequelize.import(__dirname + "/user")
     Link: sequelize.import(__dirname + "/link")
 
+  global.db.User.hasMany(global.db.Link)
 # add your other models here
 
 #

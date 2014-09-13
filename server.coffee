@@ -9,21 +9,15 @@ passport      = require("passport")
 db            = require('./models')
 flash         = require('express-flash')
 session       = require('express-session')
-
+api           = require('./API')(db)
 
 #
 # Passport
 #
 
-passport.serializeUser (user, done)->
-  done null, user.id
-
-passport.deserializeUser (id, done)->
-  db.User.find(id).error(
-    (err)-> done(err,null)  
-  ).success  (user)->
-    done(null, user)
-
+serialize_user = require('./auth/serializeUser')(api)
+passport.serializeUser serialize_user.serialze
+passport.deserializeUser serialize_user.deserialize
 passport.use require('./auth/local')(db.User)
 
 #
@@ -31,7 +25,6 @@ passport.use require('./auth/local')(db.User)
 #
 
 app = express()
-
 app.set "views", path.join(__dirname, "views")
 app.set "view engine", "jade"
 app.use logger("dev")
@@ -43,101 +36,19 @@ app.use express.static(path.join(__dirname, "public"))
 app.use passport.initialize()
 app.use passport.session()
 app.use flash()
+app.set "db", db
+app.set "api", api
+app.set "passport", passport
 
 #
 # Define routes
 #
 
-app.use (req, res, next) ->
-  res.locals.login = req.isAuthenticated()
-  next()
-
-app.get "/", (req, res) ->
-  db.User.findAll().success (users) ->
-    res.render "index",
-      title: "express",
-      users: users
-
-app.get "/login", (req, res) ->
-  res.render "login",
-    title: "Express"
-    message: req.flash('error')
-
-app.post "/login", passport.authenticate("local",
-  successRedirect: "/"
-  failureRedirect: "/login"
-  failureFlash: true
-)
-
-app.get '/logout', (req, res)->
-  req.logout()
-  res.redirect('/')
-
-app.get "/signup", (req, res) ->
-  res.render "signup",
-    title: "Express"
-
-app.post "/signup", (req, res) ->
-  db.User.build(req.body)
-    .save().complete( (user) ->
-      passport.authenticate('local')(req, res, () -> res.redirect('/'))
-    ).error (err) ->
-      console.log err
-      #res.send 'err'
-#
-# Post routes.
-#
-app.get "/links", (req, res) ->
-  db.Link.findAll().success (links) ->
-    res.render "links",
-      title: "LinkyDinks",
-      links: links
-
-app.get "/link", (req, res) ->
-  res.render "link"
-
-app.post "/link", (req, res) ->
-  db.User.find(1).success (user)->
-    db.Link.build(req.body)
-      .save().success( (link)->
-        user.addLink(link).success (task)->
-          res.redirect "links"
-      ).error (err) ->
-        res.send 'err'
-
-
-app.get "/profile/:id", (req, res) ->
-  db.User.find(req.params.id).success (user)->
-    user.getLinks().success (links)->
-      res.render "profile",
-        title: "title",
-        user: user
-        links: links
-
-
-# 
-# Catch all routes
-#
-
-app.use (req, res, next) ->
-  err = new Error("Not Found")
-  err.status = 404
-  next err
-
-if app.get("env") is "development"
-  app.use (err, req, res, next) ->
-    res.status err.status or 500
-    res.render "error",
-      message: err.message
-      error: err
-
-
-app.use (err, req, res, next) ->
-  res.status err.status or 500
-  res.render "error",
-    message: err.message
-    error: {}
-
+routes = require('./routes')(app)
+routes.users(app)
+routes.links(app)
+routes.hubot(app)
+routes.catchAll(app)
 
 #
 # Lets go
@@ -148,8 +59,6 @@ app.set "port", process.env.PORT or 3000
 db.sequelize.sync().complete (err) ->
   return  throw err[0] if err
   server = app.listen(app.get("port"), ->
-    db.User.findAll().success (users) ->
-      console.log arguments
     console.log "Express server listening on port " + server.address().port
     return
   )

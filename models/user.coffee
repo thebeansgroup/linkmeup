@@ -3,6 +3,7 @@ bcrypt = require('bcrypt')
 module.exports = (sequelize, DataTypes) ->
   User = sequelize.define "User", {
       email: { type: DataTypes.STRING, unique: true }
+      hubot_id: { type: DataTypes.STRING }
       password: 
         type: DataTypes.STRING
         set: (v) ->
@@ -12,6 +13,9 @@ module.exports = (sequelize, DataTypes) ->
   },
   {
     instanceMethods:
+      addHubot: (id)->
+        @setDataValue 'hubot_id', id
+
       comparePassword: (candidatePassword, cb) ->
         bcrypt.compare candidatePassword, @getDataValue("password"), (err, isMatch) ->
           return cb(err)  if err

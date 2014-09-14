@@ -10,7 +10,13 @@ module.exports = (app)->
   #
 
   app.set 'isAuthenticated', (req, res, next) ->
+    return next() if req.isAuthenticated()
+    res.redirect("/login")
+
+  app.use (req, res, next)->
+    res.locals.basedir = app.get('views')
     res.locals.login = req.isAuthenticated()
+    res.locals.uid = if req.user then req.user.id else false
     next()
 
   #

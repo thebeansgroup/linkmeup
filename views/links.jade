@@ -4,7 +4,10 @@ block content
   p Welcome to #{title}
   ul
     each link in links
-      li= link.url
+      li
+        a(href=link.url)= link.url
+        h3= link.title
+        p= link.description
   if login == false
     a(href = "/signup") signup
     a(href = "/login") login

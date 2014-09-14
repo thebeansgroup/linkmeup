@@ -8,7 +8,7 @@ module.exports = (app)->
         title: "LinkyDinks",
         links: links
 
-  app.get "/link", (req, res) ->
+  app.get "/link", isAuthenticated, (req, res) ->
     res.render "link"
 
   app.get "/link/:id", isAuthenticated, (req, res) ->
@@ -17,9 +17,6 @@ module.exports = (app)->
         link: link
 
   app.post "/link", isAuthenticated, (req, res) ->
-    api.User.create req.user.id, req.body, (err, link)->
+    api.Link.create req.user.id, req.body, (err, link)->
       return res.send('err') if err
       res.redirect "links"
-
-
-

@@ -27,6 +27,7 @@ passport.use require('./auth/local')(db.User)
 app = express()
 app.set "views", path.join(__dirname, "views")
 app.set "view engine", "jade"
+app.set "port", process.env.PORT or 3000
 app.use logger("dev")
 app.use bodyParser.json()
 app.use bodyParser.urlencoded(extended: false)
@@ -53,8 +54,6 @@ routes.catchAll(app)
 #
 # Lets go
 #
-
-app.set "port", process.env.PORT or 3000
 
 db.sequelize.sync().complete (err) ->
   return  throw err[0] if err

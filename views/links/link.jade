@@ -1,0 +1,11 @@
+a(href=link.url)
+  article
+    if link.title
+      h1= link.title
+    else
+      h1= link.url
+    if link.description
+      p= link.description
+    if uid == link.UserId 
+      a(href= "/account/#{user.id}/link/#{link.id}/delete") delete
+      

@@ -25,5 +25,5 @@ module.exports = (app)->
   app.post "/signup", (req, res) ->
     api.User.create req.body, (err, user) ->
       return res.send(err) if err
-      passport.authenticate('local')(req, res, () -> res.redirect('/'))
+      passport.authenticate('local')(req, res, () -> res.redirect('/login'))
 

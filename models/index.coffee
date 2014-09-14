@@ -2,9 +2,9 @@ unless global.hasOwnProperty("db")
   Sequelize = require("sequelize")
   sequelize = null
 
-  if process.env.HEROKU_POSTGRESQL_BRONZE_URL
+  if process.env.HEROKU_POSTGRESQL_MAROON_URL
     # the application is executed on Heroku ... use the postgres database
-    match = process.env.HEROKU_POSTGRESQL_BRONZE_URL.match(/postgres:\/\/([^:]+):([^@]+)@([^:]+):(\d+)\/(.+)/)
+    match = process.env.HEROKU_POSTGRESQL_MAROON_URL.match(/postgres:\/\/([^:]+):([^@]+)@([^:]+):(\d+)\/(.+)/)
     sequelize = new Sequelize(match[5], match[1], match[2],
       dialect: "postgres"
       protocol: "postgres"

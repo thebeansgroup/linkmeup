@@ -1,0 +1,4 @@
+section
+  p= user.email
+  if !user.approved
+    a(href = "/admin/approve/#{user.id}") approve

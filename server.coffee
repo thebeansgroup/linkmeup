@@ -10,6 +10,7 @@ db            = require('./models')
 flash         = require('express-flash')
 session       = require('express-session')
 api           = require('./API')(db)
+RedisStore    = require('connect-redis')(session)
 
 #
 # Passport
@@ -19,6 +20,17 @@ serialize_user = require('./auth/serializeUser')(api)
 passport.serializeUser serialize_user.serialze
 passport.deserializeUser serialize_user.deserialize
 passport.use require('./auth/local')(db.User)
+
+#
+# Redis for sessions
+#
+
+if process.env.REDISTOGO_URL
+  rtg   = require('url').parse process.env.REDISTOGO_URL
+  redis = require('redis').createClient rtg.port, rtg.hostname
+  redis.auth rtg.auth.split(':')[1] # auth 1st part is username and 2nd is password separated by ":"
+else
+  redis = require("redis").createClient()
 
 #
 # Set up
@@ -32,7 +44,7 @@ app.use logger("dev")
 app.use bodyParser.json()
 app.use bodyParser.urlencoded(extended: false)
 app.use cookieParser()
-app.use session({secret: 'secretKeyLinks'})
+app.use session({secret: 'secretKeyLinks', store: new RedisStore({client: redis}), maxAge: new Date Date.now() + ((3600000*24)*30)  })
 app.use express.static(path.join(__dirname, "public"))
 app.use passport.initialize()
 app.use passport.session()
@@ -47,6 +59,7 @@ app.set "passport", passport
 
 routes = require('./routes')(app)
 routes.users(app)
+routes.admin(app)
 routes.links(app)
 routes.hubot(app)
 routes.catchAll(app)
@@ -61,3 +74,4 @@ db.sequelize.sync().complete (err) ->
     console.log "Express server listening on port " + server.address().port
     return
   )
+

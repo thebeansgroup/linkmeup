@@ -7,11 +7,8 @@ module.exports = (app)->
   account = require('./account')(app)
 
   app.get "/", (req, res) ->
-    api.User.index (err, users) ->
-      console.log users
-      res.render "index",
-        title: "express",
-        users: users
+    res.render "index",
+      title: "express"
 
 
   app.get "/profile/:id", isAuthenticated, (req, res, next) ->

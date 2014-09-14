@@ -1,0 +1,14 @@
+ul
+  if login == false
+    li
+      a(href = "/signup") Signup
+    li
+      a(href = "/login") Login
+  else
+    li
+      a(href = "/link") Add link
+    if current_user.admin
+      li
+        a(href = "/admin") Admin
+    li
+      a(href = "/logout") Log out

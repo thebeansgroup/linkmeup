@@ -1,8 +1,8 @@
 class User
   constructor: (@db)->
 
-  index: (cb)->
-    @db.User.findAll({include: [ @db.Link ]}).success( (users) ->
+  index: (approved, cb)->
+    @db.User.findAll({where: {approved: approved}, include: [ @db.Link ]}).success( (users) ->
       cb(null, users)
     ).error( (error)->
       cb(error, null)
@@ -19,5 +19,10 @@ class User
     db.User.build(attrs).save()
       .success( (user) -> cb(null, user))
       .error( (error)-> cb(error, null))
+
+  approve: (id, cb)->
+    @db.User.find(id).success (user)->
+      user.updateAttributes(approved: true).success ->
+        cb(null)
 
 module.exports = User

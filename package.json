@@ -23,6 +23,9 @@
     "express-flash": "0.0.2",
     "bcrypt-nodejs": "0.0.3",
     "bcrypt": "^0.8.0",
-    "jsdom": "^1.0.0-pre.6"
+    "jsdom": "^1.0.0-pre.6",
+    "url": "^0.10.1",
+    "redis": "^0.12.1",
+    "connect-redis": "^2.1.0"
   }
 }

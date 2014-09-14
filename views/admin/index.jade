@@ -1,0 +1,18 @@
+extends /layout
+block content
+  h1 admin
+
+  h2 Pending Users
+  if unapproved_users != null
+    ul
+      each user in unapproved_users
+        li
+          include /users/user
+
+  h2 Approved Users
+  if approved_users != null
+    ul
+      each user in approved_users
+        li
+          include /users/user
+

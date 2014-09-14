@@ -2,18 +2,4 @@ extends layout
 block content
   h1= title
   p Welcome to #{title}
-  ul
-    each user in users
-      a(href = "/profile/"+ user.id)
-        li= user.email
-  if login == false
-    a(href = "/signup") signup
-    a(href = "/login") login
-    a(href = "/links") links
-        
-  else
-    a(href = "/logout") log out
-    a(href = "/links") links
-
-
 

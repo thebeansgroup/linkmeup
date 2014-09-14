@@ -2,6 +2,7 @@ class Hubot
   constructor: (@db)->
 
   request: (attrs, cb)->
+    return cb(true, null) if attrs.key != "B3ANT3AM"
     switch attrs.command
       when "map" then @set_user_id(attrs.from,attrs.remote_username,cb)
       when "unmap" then @set_user_id(attrs.from,null,cb)

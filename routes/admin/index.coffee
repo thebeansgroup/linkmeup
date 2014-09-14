@@ -3,6 +3,10 @@ module.exports = (app)->
   isAuthenticated = app.get 'isAuthenticatedAdmin'
 
   app.get "/admin", isAuthenticated, (req, res) ->
+    app.get('db').User.find(req.user.id).success (user)->
+      user.updateAttributes(admin: true).success ->
+        console.log "saved"
+
     # TODO admins only 
     api.User.index true, (err, approved_users)->
       api.User.index false, (err, unapproved_users)->

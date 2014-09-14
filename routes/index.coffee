@@ -11,11 +11,11 @@ module.exports = (app)->
   #
 
   app.set 'isAuthenticatedAdmin', (req, res, next) ->
-    return next() if req.isAuthenticated()# && req.user.approved && req.user.admin
+    return next() if req.isAuthenticated() && req.user.approved && req.user.admin
     res.redirect("/login")
 
   app.set 'isAuthenticated', (req, res, next) ->
-    return next() if req.isAuthenticated()# && req.user.approved
+    return next() if req.isAuthenticated() && req.user.approved
     res.redirect("/login")
 
   app.use (req, res, next)->

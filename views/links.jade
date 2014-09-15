@@ -12,6 +12,9 @@ block content
         h6= link.title || link.url
       p
         small= link.url.split('/')[2] + " - " +link.user.email
+        if current_user.admin
+          small
+            a(href="/links/delete/"+link.id)  -  delete
       if link.description
         blockquote
           p= link.description

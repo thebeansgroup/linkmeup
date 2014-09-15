@@ -12,8 +12,8 @@ class Link
       .success( (link)-> cb(null, link)  )
       .error( (error)-> cb(error, null)  )
 
-  destroy: (id,uid,cb)->
-    @db.Link.find(where: {id: id, 'UserId': uid, approved: true})
+  destroy: (id,cb)->
+    @db.Link.find(id)
       .success( (link)->
         return cb(true,null) if link is null
         link.destroy().success () -> cb(null,{})

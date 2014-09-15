@@ -3,6 +3,7 @@ moment = require('moment')
 module.exports = (app)->
   api = app.get 'api'
   isAuthenticated = app.get 'isAuthenticated'
+  isAuthenticatedAdmin = app.get 'isAuthenticatedAdmin'
 
   app.get "/", (req, res) ->
     api.Link.index (err, links)->
@@ -17,6 +18,10 @@ module.exports = (app)->
     api.Link.show req.params.id, (err,link)->
       res.render "link",
         link: link
+
+  app.get "/links/delete/:id", isAuthenticatedAdmin, (req, res) ->
+    api.Link.destroy req.params.id, (err,link)->
+      res.redirect "/"
 
   app.post "/link", isAuthenticated, (req, res) ->
     api.Link.create req.user.id, req.body, (err, link)->

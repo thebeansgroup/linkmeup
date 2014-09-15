@@ -6,10 +6,6 @@ module.exports = (app)->
   auth = require('./auth')(app)
   account = require('./account')(app)
 
-  app.get "/", (req, res) ->
-    res.render "index",
-      title: "express"
-
 
   app.get "/profile/:id", isAuthenticated, (req, res, next) ->
     api.User.show req.params.id, (err, user)->

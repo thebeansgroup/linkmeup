@@ -2,17 +2,13 @@ extends /layout
 block content
   h1 admin
 
-  h2 Pending Users
+  h3.subheader Pending Users
   if unapproved_users != null
-    ul
-      each user in unapproved_users
-        li
-          include /users/user
+    - users = unapproved_users
+    include /users/users
 
-  h2 Approved Users
+  h3.subheader Approved Users
   if approved_users != null
-    ul
-      each user in approved_users
-        li
-          include /users/user
+    - users = approved_users
+    include /users/users
 

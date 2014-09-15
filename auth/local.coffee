@@ -2,7 +2,6 @@ LocalStrategy = require("passport-local").Strategy
 
 module.exports = (User) ->
   new LocalStrategy {usernameField: 'email'}, (email, password, done) ->
-    console.log email
     User.find( where: {email: email}).error(
       (err) -> return done(err) 
     ).success (user) ->

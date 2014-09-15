@@ -18,6 +18,10 @@ module.exports = (app)->
     req.logout()
     res.redirect('/')
 
+  app.get "/awaiting-approval", (req, res)->
+    res.render "auth/awaiting"
+
+
   app.get "/signup", (req, res) ->
     res.render "signup",
       title: "Express"
@@ -25,5 +29,4 @@ module.exports = (app)->
   app.post "/signup", (req, res) ->
     api.User.create req.body, (err, user) ->
       return res.send(err) if err
-      passport.authenticate('local')(req, res, () -> res.redirect('/login'))
-
+      res.redirect("/awaiting-approval")

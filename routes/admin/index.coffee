@@ -14,3 +14,10 @@ module.exports = (app)->
     api.User.approve req.params.uid, (err)->
       res.redirect "/admin" 
 
+  app.get "/admin/adminise/:uid", isAuthenticated, (req, res) ->
+    api.User.adminise req.params.uid, (err)->
+      res.redirect "/admin"
+
+  app.get "/admin/delete/:uid", isAuthenticated, (req, res) ->
+    api.User.destroy req.params.uid, (err)->
+      res.redirect "/admin"

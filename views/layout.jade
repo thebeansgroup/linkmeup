@@ -2,9 +2,14 @@ doctype html
 html
     head
         title= title
-        link(rel='stylesheet', href='/stylesheets/style.css')
+        link(rel='stylesheet', href='/stylesheets/normalize.css')
+        link(rel='stylesheet', href='/stylesheets/app.css')
     body
+        include nav
         if message && message.length
-            strong #{message}
-        block content
-        include footer
+          .alert-box= message
+        .row
+          .columns
+            block content
+        script(src='/javascripts/jquery.js')
+        script(src='/javascripts/foundation.min.js')

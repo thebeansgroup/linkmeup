@@ -1,0 +1,42 @@
+nav.top-bar(data-topbar='')
+    ul.title-area
+        li.name
+          h1
+            a(href='/') Link Me Up
+        li.toggle-topbar.menu-icon
+          a(href='#')
+            span Menu
+
+      section.top-bar-section
+
+        ul.right
+          li.divider.hide-for-small
+          li
+            a(href='#')
+              | Messages
+              span.top-bar-unread 3
+
+          if login == false
+            li.divider.hide-for-small
+            li
+              a(href = "/signup") Signup
+
+            li.divider.hide-for-small
+            li
+              a(href = "/login") Login
+
+          else
+
+            li.divider.hide-for-small
+            li
+              a(href = "/link") Add link
+
+            if current_user.admin
+              li.divider.hide-for-small
+
+              li
+                a(href = "/admin") Admin
+
+            li.divider.hide-for-small
+            li
+              a(href = "/logout") Log out

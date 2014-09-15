@@ -1,17 +1,17 @@
 extends layout
 block content
-  h1= title
-  p Welcome to #{title}
-  ul
-    each link in links
-      li
-        a(href=link.url)= link.url
-        h3= link.title
-        p= link.description
-  if login == false
-    a(href = "/signup") signup
-    a(href = "/login") login
-    a(href = "/link") New link
-  else
-    a(href = "/logout") log out
-    a(href = "/link") New link
+  - date = ""
+  each link in links
+    
+    if !moment(link.createdAt).isSame(date, 'Hour')
+      h3= moment(link.createdA).format("dddd, Do MMMM YYYY")
+      - date = link.createdAt
+      
+    .callout.panel
+      a(href=link.url)
+        h6= link.title || link.url
+      p
+        small= link.url.split('/')[2] + " - " +link.user.email
+      if link.description
+        blockquote
+          p= link.description

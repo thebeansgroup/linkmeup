@@ -1,0 +1,20 @@
+table(width="100%")
+  thead
+    tr
+      th(width="60%") Email
+      th(width="40%") Actions
+  tbody
+    each user in users
+      tr
+        td= user.email
+        td
+          ul.button-group
+            if !user.approved
+              li
+                a.tiny.button(href = "/admin/approve/#{user.id}") approve
+            if user.approved && !user.admin
+              li
+                a.tiny.button(href = "/admin/adminise/#{user.id}") make admin
+            if user.id != current_user.id
+              li
+                a.tiny.button(href = "/admin/delete/#{user.id}") delete

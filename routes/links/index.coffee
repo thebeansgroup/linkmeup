@@ -1,12 +1,14 @@
+moment = require('moment')
+
 module.exports = (app)->
   api = app.get 'api'
   isAuthenticated = app.get 'isAuthenticated'
 
-  app.get "/links", isAuthenticated, (req, res) ->
+  app.get "/", (req, res) ->
     api.Link.index (err, links)->
       res.render "links",
-        title: "LinkyDinks",
-        links: links
+        links: links,
+        moment: moment
 
   app.get "/link", isAuthenticated, (req, res) ->
     res.render "link"
@@ -19,4 +21,4 @@ module.exports = (app)->
   app.post "/link", isAuthenticated, (req, res) ->
     api.Link.create req.user.id, req.body, (err, link)->
       return res.send('err') if err
-      res.redirect "links"
+      res.redirect "/"

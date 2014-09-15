@@ -1,11 +1,17 @@
 extends layout
 block content
-  form(action="/signup", method="post")
-    .form-group
-      label Email
-        input.form-control(name = "email", type = "text")
-      .form-group
-        label Password
-        input.form-control(name = "password", type = "password")
+  .row
+    .large-6.columns.large-centered
+      form.custom(action = "/signup", method = "post")
+        fieldset
+            legend Login
+            .row
+              .large-12.columns
 
-      button.btn.btn-warning.btn-lg(type = "submit") Signup
+                .form-group
+                  label Email
+                  input.form-control(name = "email", type = "text")
+                .form-group
+                  label Password
+                  input.form-control(name = "password", type = "password")
+                button.expand.success-darkest(type = "submit") Sign up

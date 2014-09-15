@@ -3,7 +3,7 @@ block content
   - date = ""
   each link in links
     
-    if !moment(link.createdAt).isSame(date, 'Hour')
+    if !moment(link.createdAt).isSame(date, 'day')
       h3= moment(link.createdA).format("dddd, Do MMMM YYYY")
       - date = link.createdAt
       
